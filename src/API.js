@@ -7,3 +7,11 @@ export async function getBeersList(page) {
     console.log(error);
   }
 }
+
+export async function getBeer(id) {
+  try {
+    return await (await fetch(`${API_URL}/${id}`)).json();
+  } catch (error) {
+    console.log(error);
+  }
+}
