@@ -1,5 +1,9 @@
 import React from 'react';
 
-const Grid = () => <></>;
+const Grid = ({ children }) => (
+  <div>
+    <div>{children}</div>
+  </div>
+);
 
 export default Grid;
