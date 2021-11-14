@@ -46,6 +46,7 @@ const Home = () => {
         {beers.map((beer) => (
           <Product
             key={beer.id}
+            beerId={beer.id}
             imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
             title={beer.name}
           />
