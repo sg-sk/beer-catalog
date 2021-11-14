@@ -3,9 +3,12 @@ import { getBeersList } from '../API';
 import Grid from '../components/Grid';
 import Product from '../components/Product';
 import Button from './Button';
+import Spinner from './Spinner';
+import NoImageAvailable from '../assets/no-image-available.jpg';
 
 const Home = () => {
   const [beers, setBeers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
@@ -13,9 +16,11 @@ const Home = () => {
   // Fetch list of beers
   const fetchBeers = async (page) => {
     try {
+      setIsLoading(true);
       setError(false);
       const beers = await getBeersList(page);
       setBeers((previousBeers) => [...previousBeers, ...beers]);
+      setIsLoading(false);
     } catch (error) {
       setError(true);
     }
@@ -39,10 +44,18 @@ const Home = () => {
     <>
       <Grid>
         {beers.map((beer) => (
-          <Product key={beer.id} imageUrl={beer.image_url} title={beer.name} />
+          <Product
+            key={beer.id}
+            imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
+            title={beer.name}
+          />
         ))}
       </Grid>
-      <Button text='Load More' callback={() => setIsLoadingMore(true)} />
+      {!isLoading ? (
+        <Button text='Load More' callback={() => setIsLoadingMore(true)} />
+      ) : (
+        <Spinner />
+      )}
     </>
   );
 };
