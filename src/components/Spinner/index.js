@@ -1,5 +1,3 @@
-import React from 'react';
-
-const Spinner = () => {};
+import { Spinner } from './Spinner.styles';
 
 export default Spinner;
