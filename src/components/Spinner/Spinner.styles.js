@@ -3,14 +3,14 @@ import styled from 'styled-components';
 export const Spinner = styled.div`
   & {
     display: inline-block;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
   }
   &:after {
     content: ' ';
     display: block;
-    width: 64px;
-    height: 64px;
+    width: 32px;
+    height: 32px;
     margin: 8px;
     border-radius: 50%;
     border: 6px solid #000;
