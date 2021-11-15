@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Product = ({ beerId, imageUrl, title, alcoholByVolume }) => (
   <div>
     <Link to={`/${beerId}`}>
-      <div className='bg-gray-100 py-11 transition duration-150 ease-in-out transform hover:scale-105'>
+      <div className='bg-gray-100 py-11 rounded transition duration-150 ease-in-out transform hover:scale-105'>
         <img
           src={imageUrl}
           alt='beer-product-img'
