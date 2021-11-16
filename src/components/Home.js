@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react/cjs/react.development';
 import { getBeersList } from '../API';
+import Header from './Header';
+import Footer from './Footer';
 import Grid from '../components/Grid';
 import Product from '../components/Product';
-import Button from './Button';
+import LoadingButton from './LoadingButton';
 import Spinner from './Spinner';
+import ScrollToTopButton from './ScrollToTopButton';
 import NoImageAvailable from '../assets/no-image-available.jpg';
 
 const Home = () => {
@@ -42,21 +45,34 @@ const Home = () => {
 
   return (
     <>
-      <Grid>
-        {beers.map((beer) => (
-          <Product
-            key={beer.id}
-            beerId={beer.id}
-            imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
-            title={beer.name}
-          />
-        ))}
-      </Grid>
-      {!isLoading ? (
-        <Button text='Load More' callback={() => setIsLoadingMore(true)} />
-      ) : (
-        <Spinner />
-      )}
+      <div className='mx-8'>
+        <Header />
+        <Grid>
+          {beers.map((beer) => (
+            <Product
+              key={beer.id}
+              beerId={beer.id}
+              imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
+              title={beer.name}
+              alcoholByVolume={beer.abv}
+            />
+          ))}
+        </Grid>
+        <div className='flex justify-center my-7'>
+          {!isLoading ? (
+            <LoadingButton
+              text='Load More'
+              callback={() => setIsLoadingMore(true)}
+            />
+          ) : (
+            <Spinner />
+          )}
+        </div>
+      </div>
+      <div className='flex justify-end'>
+        <ScrollToTopButton />
+      </div>
+      <Footer />
     </>
   );
 };
