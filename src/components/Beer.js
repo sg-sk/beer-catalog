@@ -23,7 +23,6 @@ const Beer = () => {
         setError(false);
         const beer = await getBeer(beerId);
         setCurrentBeer(beer);
-        console.log(beer);
       } catch (error) {
         setError(true);
       }
