@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { LINKEDIN_URL, GITHUB_URL } from '../../config';
 
