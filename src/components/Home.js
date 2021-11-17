@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react';
 import { getBeersList } from '../API';
 import Header from './Header';
 import Footer from './Footer';
