@@ -45,8 +45,9 @@ const Home = () => {
 
   return (
     <>
-      <div className='mx-8'>
+      <div className='mx-7 xl:mx-32 2xl:mx-52'>
         <Header />
+        {error && <div>Oops something happened!</div>}
         <Grid>
           {beers.map((beer) => (
             <Product
