@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getBeersList } from '../API';
+import { isPersistedState } from '../helpers';
 import Header from './Header';
 import Footer from './Footer';
 import Grid from '../components/Grid';
@@ -9,11 +10,15 @@ import Spinner from './Spinner';
 import ScrollToTopButton from './ScrollToTopButton';
 import NoImageAvailable from '../assets/no-image-available.jpg';
 
+const initialState = {
+  beers: [],
+  page: 1,
+};
+
 const Home = () => {
-  const [beers, setBeers] = useState([]);
+  const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [page, setPage] = useState(1);
   const [error, setError] = useState(false);
 
   // Fetch list of beers
@@ -21,8 +26,14 @@ const Home = () => {
     try {
       setIsLoading(true);
       setError(false);
-      const beers = await getBeersList(page);
-      setBeers((previousBeers) => [...previousBeers, ...beers]);
+      const currentBeers = await getBeersList(page);
+      setState((previousState) => ({
+        ...previousState,
+        beers:
+          page > 1
+            ? [...previousState.beers, ...currentBeers]
+            : [...currentBeers],
+      }));
       setIsLoading(false);
     } catch (error) {
       setError(true);
@@ -31,6 +42,12 @@ const Home = () => {
 
   // Initial loading
   useEffect(() => {
+    const sessionState = isPersistedState('homeState');
+    if (sessionState) {
+      setState(sessionState);
+      return;
+    }
+
     fetchBeers(1);
   }, []);
 
@@ -38,10 +55,18 @@ const Home = () => {
   useEffect(() => {
     if (!isLoadingMore) return;
 
-    fetchBeers(page + 1);
-    setPage((previousPage) => previousPage + 1);
+    fetchBeers(state.page + 1);
+    setState((previousState) => ({
+      ...previousState,
+      page: previousState.page + 1,
+    }));
     setIsLoadingMore(false);
-  }, [page, isLoadingMore]);
+  }, [state.page, isLoadingMore]);
+
+  // Write to session storage
+  useEffect(() => {
+    sessionStorage.setItem('homeState', JSON.stringify(state));
+  }, [state]);
 
   return (
     <>
@@ -49,7 +74,7 @@ const Home = () => {
         <Header />
         {error && <div>Oops something happened!</div>}
         <Grid>
-          {beers.map((beer) => (
+          {state.beers.map((beer) => (
             <Product
               key={beer.id}
               beerId={beer.id}
