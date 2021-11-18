@@ -9,6 +9,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Breadcrumb from './Breadcrumb';
 import ProductInfo from './ProductInfo';
+import NotFound from './NotFound';
 
 const Beer = () => {
   const { beerId } = useParams();
@@ -36,21 +37,25 @@ const Beer = () => {
         <Header />
         {error && <div>Oops something happened!</div>}
         <div>
-          {currentBeer.map((beer) => (
-            <div key={beer.id}>
-              <div className='mb-10'>
-                <Breadcrumb beerName={beer.name} />
+          {currentBeer.length ? (
+            currentBeer.map((beer) => (
+              <div key={beer.id}>
+                <div className='mb-10'>
+                  <Breadcrumb beerName={beer.name} />
+                </div>
+                <ProductInfo
+                  imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
+                  name={beer.name}
+                  tagline={beer.tagline}
+                  description={beer.description}
+                  alcoholByVolume={beer.abv}
+                  firstBrewed={beer.first_brewed}
+                />
               </div>
-              <ProductInfo
-                imageUrl={beer.image_url ? beer.image_url : NoImageAvailable}
-                name={beer.name}
-                tagline={beer.tagline}
-                description={beer.description}
-                alcoholByVolume={beer.abv}
-                firstBrewed={beer.first_brewed}
-              />
-            </div>
-          ))}
+            ))
+          ) : (
+            <NotFound />
+          )}
         </div>
       </div>
       <Footer />
