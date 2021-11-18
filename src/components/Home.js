@@ -19,6 +19,7 @@ const Home = () => {
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isResponseDataExhausted, setIsResponseDataExhausted] = useState(false);
   const [error, setError] = useState(false);
 
   // Fetch list of beers
@@ -26,14 +27,20 @@ const Home = () => {
     try {
       setIsLoading(true);
       setError(false);
+
       const currentBeers = await getBeersList(page);
-      setState((previousState) => ({
-        ...previousState,
-        beers:
-          page > 1
-            ? [...previousState.beers, ...currentBeers]
-            : [...currentBeers],
-      }));
+      // Check if data is exhausted
+      if (currentBeers.length) {
+        setState((previousState) => ({
+          ...previousState,
+          beers:
+            page > 1
+              ? [...previousState.beers, ...currentBeers]
+              : [...currentBeers],
+        }));
+      } else {
+        setIsResponseDataExhausted(true);
+      }
       setIsLoading(false);
     } catch (error) {
       setError(true);
@@ -86,13 +93,19 @@ const Home = () => {
           ))}
         </Grid>
         <div className='flex justify-center my-7'>
-          {!isLoading ? (
-            <LoadingButton
-              text='Load More'
-              callback={() => setIsLoadingMore(true)}
-            />
+          {!isResponseDataExhausted ? (
+            !isLoading ? (
+              <LoadingButton
+                text='Load More'
+                callback={() => setIsLoadingMore(true)}
+              />
+            ) : (
+              <Spinner />
+            )
           ) : (
-            <Spinner />
+            <div className='font-bold text-base md:text-2xl'>
+              ⚠️ You have reached the end ⚠️
+            </div>
           )}
         </div>
       </div>
