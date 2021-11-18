@@ -42,6 +42,7 @@ const Home = () => {
 
   // Initial loading
   useEffect(() => {
+    // Check for existing session storage key
     const sessionState = isPersistedState('homeState');
     if (sessionState) {
       setState(sessionState);
