@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { getBeersList } from '../API';
+import { API_PAGINATION_ITEMS } from '../config';
 import { isPersistedState } from '../helpers';
 import Header from './Header';
 import Footer from './Footer';
+import SearchBar from './SearchBar';
 import Grid from '../components/Grid';
 import Product from '../components/Product';
 import LoadingButton from './LoadingButton';
@@ -16,6 +18,7 @@ const initialState = {
 };
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -23,14 +26,20 @@ const Home = () => {
   const [error, setError] = useState(false);
 
   // Fetch list of beers
-  const fetchBeers = async (page) => {
+  const fetchBeers = async (page, searchTerm = '') => {
     try {
       setIsLoading(true);
       setError(false);
 
-      const currentBeers = await getBeersList(page);
+      const currentBeers = await getBeersList(page, searchTerm);
+      const currentTotalBeersCount = currentBeers.length;
       // Check if data is exhausted
-      if (currentBeers.length) {
+      if (currentTotalBeersCount) {
+        if (currentTotalBeersCount < API_PAGINATION_ITEMS) {
+          setIsResponseDataExhausted(true);
+        } else {
+          setIsResponseDataExhausted(false);
+        }
         setState((previousState) => ({
           ...previousState,
           beers:
@@ -49,38 +58,43 @@ const Home = () => {
 
   // Initial loading
   useEffect(() => {
-    // Check for existing session storage key
-    const sessionState = isPersistedState('homeState');
-    if (sessionState) {
-      setState(sessionState);
-      return;
+    if (!searchTerm) {
+      // Check for existing session storage key
+      const sessionState = isPersistedState('homeState');
+      if (sessionState) {
+        setState(sessionState);
+        return;
+      }
     }
-
-    fetchBeers(1);
-  }, []);
+    setState(initialState);
+    fetchBeers(1, searchTerm);
+  }, [searchTerm]);
 
   // Load more
   useEffect(() => {
     if (!isLoadingMore) return;
 
-    fetchBeers(state.page + 1);
+    fetchBeers(state.page + 1, searchTerm);
     setState((previousState) => ({
       ...previousState,
       page: previousState.page + 1,
     }));
     setIsLoadingMore(false);
-  }, [state.page, isLoadingMore]);
+  }, [searchTerm, state.page, isLoadingMore]);
 
   // Write to session storage
   useEffect(() => {
-    sessionStorage.setItem('homeState', JSON.stringify(state));
-  }, [state]);
+    if (!searchTerm) sessionStorage.setItem('homeState', JSON.stringify(state));
+  }, [searchTerm, state]);
 
   return (
     <>
       <div className='mx-7 xl:mx-32 2xl:mx-52'>
         <Header />
         {error && <div>Oops something happened!</div>}
+        <div className='mb-6'>
+          <SearchBar setSearchTerm={setSearchTerm} />
+        </div>
         <Grid>
           {state.beers.map((beer) => (
             <Product
@@ -102,11 +116,7 @@ const Home = () => {
             ) : (
               <Spinner />
             )
-          ) : (
-            <div className='font-bold text-base md:text-2xl'>
-              ⚠️ You have reached the end ⚠️
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
       <div className='flex justify-end'>
