@@ -32,7 +32,7 @@ const Beer = () => {
 
   return (
     <>
-      <div className='mx-7 mb-20 xl:mx-32 2xl:mx-52'>
+      <div id='content' className='mx-7 mb-20 xl:mx-32 2xl:mx-52'>
         <Header />
         {error && <div>Oops something happened!</div>}
         <div>

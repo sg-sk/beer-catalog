@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Logo from '../../assets/logo.png';
 
 const Header = () => (
-  <div className='py-10'>
+  <div id='header' className='py-10'>
     <Link to='/' className='inline-block'>
       <img src={Logo} alt='logo' className='h-24' />
     </Link>

@@ -8,7 +8,7 @@ import Github from '../../assets/github-square-brands.svg';
 
 const Footer = () => {
   return (
-    <div className='bg-gray-100'>
+    <div id='footer' className='bg-gray-100'>
       <div className='flex flex-col gap-4 py-7'>
         <div className='flex justify-center'>
           <img src={Logo} alt='logo' className='h-24' />
