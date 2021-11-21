@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getBeersList } from '../API';
-import { API_PAGINATION_ITEMS } from '../config';
 import { isPersistedState } from '../helpers';
 import Header from './Header';
 import Footer from './Footer';
@@ -22,7 +21,6 @@ const Home = () => {
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [isResponseDataExhausted, setIsResponseDataExhausted] = useState(false);
   const [error, setError] = useState(false);
 
   // Fetch list of beers
@@ -32,24 +30,15 @@ const Home = () => {
       setError(false);
 
       const currentBeers = await getBeersList(page, searchTerm);
-      const currentTotalBeersCount = currentBeers.length;
       // Check if data is exhausted
-      if (currentTotalBeersCount) {
-        if (currentTotalBeersCount < API_PAGINATION_ITEMS) {
-          setIsResponseDataExhausted(true);
-        } else {
-          setIsResponseDataExhausted(false);
-        }
-        setState((previousState) => ({
-          ...previousState,
-          beers:
-            page > 1
-              ? [...previousState.beers, ...currentBeers]
-              : [...currentBeers],
-        }));
-      } else {
-        setIsResponseDataExhausted(true);
-      }
+      setState((previousState) => ({
+        ...previousState,
+        beers:
+          page > 1
+            ? [...previousState.beers, ...currentBeers]
+            : [...currentBeers],
+      }));
+
       setIsLoading(false);
     } catch (error) {
       setError(true);
@@ -107,16 +96,14 @@ const Home = () => {
           ))}
         </Grid>
         <div className='flex justify-center my-7'>
-          {!isResponseDataExhausted ? (
-            !isLoading ? (
-              <LoadingButton
-                text='Load More'
-                callback={() => setIsLoadingMore(true)}
-              />
-            ) : (
-              <Spinner />
-            )
-          ) : null}
+          {!isLoading ? (
+            <LoadingButton
+              text='Load More'
+              callback={() => setIsLoadingMore(true)}
+            />
+          ) : (
+            <Spinner />
+          )}
         </div>
       </div>
       <div className='flex justify-end'>
