@@ -1,8 +1,11 @@
 import { API_URL } from './config';
 
-export async function getBeersList(page) {
+export async function getBeersList(page, searchTerm) {
   try {
-    return await (await fetch(`${API_URL}?page=${page}`)).json();
+    const endpoint = searchTerm
+      ? `${API_URL}?beer_name=${searchTerm}&page=${page}`
+      : `${API_URL}?page=${page}`;
+    return await (await fetch(endpoint)).json();
   } catch (error) {
     console.log(error);
   }
