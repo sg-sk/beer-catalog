@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
+// Assets
+import NoImageAvailable from '../assets/no-image-available.jpg';
+// API
 import { getBeersList } from '../API';
+// Helper
 import { isPersistedState } from '../helpers';
+// Components
 import Header from './Header';
 import Footer from './Footer';
 import SearchBar from './SearchBar';
@@ -9,7 +14,6 @@ import Product from '../components/Product';
 import LoadingButton from './LoadingButton';
 import Spinner from './Spinner';
 import ScrollToTopButton from './ScrollToTopButton';
-import NoImageAvailable from '../assets/no-image-available.jpg';
 
 const initialState = {
   beers: [],

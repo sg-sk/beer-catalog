@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-
-import { getBeer } from '../API';
-
+// Assets
 import NoImageAvailable from '../assets/no-image-available.jpg';
-
+// API
+import { getBeer } from '../API';
+// Components
 import Header from './Header';
 import Footer from './Footer';
 import Breadcrumb from './Breadcrumb';
