@@ -12,9 +12,13 @@ Beer Catalog is a website that displays many types of beer. It also allows to se
 
 ## Technologies
 
-- React.js
-- Tailwind.css
+- [React.js](https://reactjs.org/)
+- [Tailwind.css](https://tailwindcss.com/)
 
 ## API
 
 - [Punk API Documentation](https://punkapi.com/documentation/v2)
+
+## Assets
+
+- [FontAwesome](https://fontawesome.com/)
