@@ -9,7 +9,6 @@ import Header from './Header';
 import Footer from './Footer';
 import Breadcrumb from './Breadcrumb';
 import ProductInfo from './ProductInfo';
-import NotFound from './NotFound';
 
 const Beer = () => {
   const { beerId } = useParams();
@@ -35,7 +34,7 @@ const Beer = () => {
     <>
       <div id='content' className='mx-7 mb-20 xl:mx-32 2xl:mx-52'>
         <Header />
-        {error && <NotFound />}
+        {error && <div>Oops something happened!</div>}
         <div>
           {currentBeer.map((beer) => (
             <div key={beer.id}>
